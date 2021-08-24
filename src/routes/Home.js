@@ -2,9 +2,9 @@ import { useState } from "react";
 import { dbService } from "fbase";
 import { useEffect } from "react";
 import Nweet from "components/Nweet";
+import NweetFactory from "components/NweetFactory";
 
 const Home = ({ userObj }) => {
-  const [nweet, setNweet] = useState("");
   const [nweets, setNweets] = useState([]);
 
   // const getNweets = async () => {
@@ -26,37 +26,9 @@ const Home = ({ userObj }) => {
     });
   }, []);
 
-  const onSubmit = async (event) => {
-    event.preventDefault();
-    await dbService.collection("nweets").add({
-      text: nweet,
-      createdAt: Date.now(),
-      creatorId: userObj.uid,
-    });
-    setNweet("");
-  };
-
-  const onChange = (event) => {
-    event.preventDefault();
-    const {
-      target: { value },
-    } = event;
-    setNweet(value);
-  };
-
   return (
     <>
-      <form onSubmit={onSubmit}>
-        <input
-          value={nweet}
-          onChange={onChange}
-          type="text"
-          placeholder="What's on your mind ?"
-          maxLength={120}
-        />
-        <input type="submit" value="Nweet" />
-      </form>
-
+      <NweetFactory userObj={userObj} />
       <div>
         {nweets.map((nweet) => (
           <Nweet
